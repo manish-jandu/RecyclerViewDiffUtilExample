@@ -15,6 +15,21 @@ class MyDiffUtil(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].title == newList[newItemPosition].title
+        if (oldList.javaClass != newList?.javaClass) {
+            return false
+        }
+        if (oldList[oldItemPosition].id != newList[newItemPosition].id) {
+            return false
+        }
+        if (oldList[oldItemPosition].imageResource != newList[newItemPosition].imageResource) {
+            return false
+        }
+        if (oldList[oldItemPosition].title != newList[newItemPosition].title) {
+            return false
+        }
+        if (oldList[oldItemPosition].subTitle != newList[newItemPosition].subTitle) {
+            return false
+        }
+        return true
     }
 }

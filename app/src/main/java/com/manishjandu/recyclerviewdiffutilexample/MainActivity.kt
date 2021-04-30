@@ -2,6 +2,7 @@ package com.manishjandu.recyclerviewdiffutilexample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,12 +10,13 @@ import com.manishjandu.recyclerviewdiffutilexample.databinding.ActivityMainBindi
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-    companion object{
+    companion object {
         const val TAG = "MainActivity"
-        var size = 500
+        var size = 5
     }
+
     private lateinit var binding: ActivityMainBinding
-    private val exampleList:ArrayList<ExampleItem> = generateDummyList(size)
+    private val exampleList: ArrayList<ExampleItem> = generateDummyList(size)
     private val adapter by lazy { ExampleAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,26 +27,32 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.rv.adapter = adapter
-        adapter.submitList(exampleList)
+        binding.rv.setHasFixedSize(true)
         binding.rv.layoutManager = LinearLayoutManager(this)
 
+
+        adapter.submitList(exampleList)
+
+        binding.btnInsertItem.setOnClickListener {
+            val newItem = ExampleItem(
+                "$size",
+                R.drawable.ic_android,
+                "New item at position $size",
+                "Second Line $size"
+            )
+            size++
+            exampleList.add(newItem)
+            //Log.i(TAG, "example list size ${exampleList.size}")
+            adapter.submitList(exampleList)
+        }
+        binding.btnRemoveItem.setOnClickListener {
+            if(exampleList.isNotEmpty()){
+                exampleList.removeAt(0)
+            }
+            adapter.submitList(exampleList)
+        }
     }
 
-
-    fun insertItem(view:View){
-        val index = Random.nextInt(8)
-        val newItem = ExampleItem(
-            "${size++}",
-            R.drawable.ic_android,
-            "New item at position $index",
-            "Line 2"
-        )
-        exampleList.add(index,newItem)
-    }
-    fun removeItem(view:View){
-        val index = Random.nextInt(8)
-        exampleList.removeAt(index)
-    }
     private fun generateDummyList(size: Int): ArrayList<ExampleItem> {
         val list = ArrayList<ExampleItem>()
         for (i in 0 until size) {
@@ -53,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 1 -> R.drawable.ic_audio
                 else -> R.drawable.ic_sun
             }
-            val item = ExampleItem("$i",drawable, "Item $i", "Line 2")
+            val item = ExampleItem("$i", drawable, "Item $i", "Second Line $i")
             list.add(item)
         }
         return list

@@ -12,8 +12,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/llButtons"
         android:clipToPadding="false"
-        android:padding="4dp"
-        tools:listitem="@layout/example_item" />
+        android:padding="4dp" />
 
     <LinearLayout
         android:id="@+id/llButtons"
@@ -31,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:onClick="insertItem"
             android:text="Insert Item" />
 
         <Button
@@ -39,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="removeItem"
             android:text="Remove Item" />
     </LinearLayout>
 </RelativeLayout>

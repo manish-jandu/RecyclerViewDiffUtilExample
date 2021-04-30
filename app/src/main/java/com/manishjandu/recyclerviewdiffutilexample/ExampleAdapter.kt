@@ -1,24 +1,28 @@
 package com.manishjandu.recyclerviewdiffutilexample
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.manishjandu.recyclerviewdiffutilexample.MainActivity.Companion.TAG
 import com.manishjandu.recyclerviewdiffutilexample.databinding.ActivityMainBinding
 import com.manishjandu.recyclerviewdiffutilexample.databinding.ExampleItemBinding
 
 class ExampleAdapter() :
     RecyclerView.Adapter<ExampleAdapter.ExampleAdapterViewHolder>() {
-    private var oldExampleList: ArrayList<ExampleItem> = ArrayList<ExampleItem>()
+    private val oldExampleList: ArrayList<ExampleItem> = ArrayList()
 
-    fun submitList(exampleItemsList: ArrayList<ExampleItem>) {
-        val diffUtil: DiffUtil.DiffResult = DiffUtil.calculateDiff(
-            MyDiffUtil(oldExampleList, exampleItemsList)
-        )
-        oldExampleList = exampleItemsList
-        diffUtil.dispatchUpdatesTo(this)
+    fun submitList(newItemsList: ArrayList<ExampleItem>) {
+        Log.i(TAG,"old ${oldExampleList.size}")
+        Log.i(TAG,"new ${newItemsList.size}")
+        val diffUtil = MyDiffUtil(this.oldExampleList,newItemsList)
+        val diffUtilResult = DiffUtil.calculateDiff(diffUtil,false)
+        oldExampleList.clear()
+        oldExampleList.addAll(newItemsList)
+        diffUtilResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExampleAdapterViewHolder {
